@@ -34,6 +34,8 @@ jobs:
           name: examine combined file
           command: |
             cat combined.txt
+            
+            ls -laH .
 
 workflows:
   combine-files:
