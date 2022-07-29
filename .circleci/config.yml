@@ -1,47 +1,11 @@
 version: 2.1
 
 jobs:
-  test:
-    parallelism: 3
+  build:
     docker:
-      - image: cimg/base:stable
+      - image: cimg/python:3.9
     resource_class: small
     steps:
-      - run:
-          name: verify position
-          command: |
-            printenv CIRCLE_NODE_INDEX
-      - run:
-          name: generate some files
-          command: |
-            curl -s https://ramenipsum.herokuapp.com/paragraphs/1 > "results_${CIRCLE_NODE_INDEX}.txt"
-      - persist_to_workspace:
-          root: ~/project
-          paths:
-            - results_*
-  collect:
-    docker:
-      - image: cimg/base:stable
-    resource_class: small
-    steps:
-      - attach_workspace:
-          at: ~/project
-      - run:
-          name: concat files
-          command: |
-            cat results_*.txt > combined.txt
-      - run:
-          name: examine combined file
-          command: |
-            cat combined.txt
-            
-            ls -laH .
-
-workflows:
-  combine-files:
-    jobs:
-      - test
-      - collect:
-          requires:
-            - test
-            
+      - run: |
+          python3 -m venv venv
+          ls -laH venv
