@@ -9,3 +9,4 @@ jobs:
       - run: |
           python3 -m venv venv
           ls -laH venv
+          . venv/bin/activate
