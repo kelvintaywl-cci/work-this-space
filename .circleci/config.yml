@@ -7,6 +7,12 @@ jobs:
     resource_class: small
     steps:
       - run: |
+          sudo apt-get update
+          sudo apt-get install tree
+      - run: |
           python3 -m venv venv
-          ls -laH venv
+          # inspect
+          tree -L 3 venv
+      - run: |
           . venv/bin/activate
+          pip install --upgrade pip
