@@ -5,6 +5,8 @@ jobs:
     parallelism: 3
     docker:
       - image: cimg/base:stable
+    environment:
+      MY_WORKDIR: ~/project
     resource_class: small
     steps:
       - run:
@@ -16,7 +18,7 @@ jobs:
           command: |
             curl -s https://ramenipsum.herokuapp.com/paragraphs/1 > "results_${CIRCLE_NODE_INDEX}.txt"
       - persist_to_workspace:
-          root: ~/project
+          root: "${MY_WORKDIR}"
           paths:
             - results_*
   collect:
