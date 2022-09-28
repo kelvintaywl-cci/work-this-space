@@ -18,7 +18,9 @@ jobs:
           command: |
             curl -s https://ramenipsum.herokuapp.com/paragraphs/1 > "results_${CIRCLE_NODE_INDEX}.txt"
       - persist_to_workspace:
-          root: "${MY_WORKDIR}"
+          # seeing if the .Environment template from Cache feature works
+          # https://circleci.com/docs/caching#using-keys-and-templates
+          root: {{ .Environment.WORKSPACE_DIR }}
           paths:
             - results_*
   collect:
