@@ -14,22 +14,23 @@ jobs:
       - run:
           name: generate some files
           command: |
-            curl -s https://ramenipsum.herokuapp.com/paragraphs/1 > "results_${CIRCLE_NODE_INDEX}.txt"
+            mkdir generated
+            curl -s https://ramenipsum.herokuapp.com/paragraphs/1 > "generated/.results_${CIRCLE_NODE_INDEX}"
       - persist_to_workspace:
-          root: ~/project
+          root: ~/project/generated
           paths:
-            - results_*
+            - .*
   collect:
     docker:
       - image: cimg/base:stable
     resource_class: small
     steps:
       - attach_workspace:
-          at: ~/project
+          at: ~/project/generated
       - run:
           name: concat files
           command: |
-            cat results_*.txt > combined.txt
+            cat generated/.results_* > combined.txt
       - run:
           name: examine combined file
           command: |
