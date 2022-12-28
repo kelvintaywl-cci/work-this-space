@@ -15,10 +15,10 @@ jobs:
           name: create files
           command: |
             mkdir foo
-            # approx 12 GB
-            for i in {1..120}
+            # approx 12 GB, totalling 50,000 files of 250kB
+            for i in {1..50000}
             do
-              head -c 100MB /dev/urandom > "foo/random{$i}.txt"
+              head -c 256000 /dev/urandom > "foo/random{$i}.txt"
             done
       - run: |
           ls -lh foo
