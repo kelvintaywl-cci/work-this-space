@@ -1,47 +1,44 @@
 version: 2.1
 
-jobs:
-  test:
-    parallelism: 3
+executors:
+  base:
     docker:
-      - image: cimg/base:stable
-    resource_class: small
+      - image: cimg/base:current
+    resource_class: medium
+
+jobs:
+  before:
+    executor: base
     steps:
+      - checkout
       - run:
-          name: verify position
+          name: create files
           command: |
-            printenv CIRCLE_NODE_INDEX
-      - run:
-          name: generate some files
-          command: |
-            curl -s https://ramenipsum.herokuapp.com/paragraphs/1 > "results_${CIRCLE_NODE_INDEX}.txt"
+            mkdir foo
+            # approx 12 GB
+            for i in {1..120}
+            do
+              head -c 100MB /dev/urandom > "foo/random{$i}.txt"
+            done
+      - run: |
+          ls -lh foo
       - persist_to_workspace:
           root: ~/project
           paths:
-            - results_*
-  collect:
-    docker:
-      - image: cimg/base:stable
-    resource_class: small
+            - foo
+
+  after:
+    executor: base
     steps:
       - attach_workspace:
           at: ~/project
-      - run:
-          name: concat files
-          command: |
-            cat results_*.txt > combined.txt
-      - run:
-          name: examine combined file
-          command: |
-            cat combined.txt
-            
-            ls -laH .
+      - run: |
+          ls -lh  ~/project
 
 workflows:
-  combine-files:
+  main:
     jobs:
-      - test
-      - collect:
+      - before
+      - after:
           requires:
-            - test
-            
+            - before
