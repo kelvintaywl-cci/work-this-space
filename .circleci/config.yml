@@ -11,10 +11,17 @@ jobs:
     executor: base
     steps:
       - checkout
+      - run:
+          name: compress foo/bar (zip)
+          command: |
+            cd foo
+            # compression levels: -0 to -9 (defaults at -6)
+            # -0: no compression, -9 being the highest and most CPU-intensive
+            zip -9 -r bar.zip bar
       - persist_to_workspace:
           root: ~/project
           paths:
-            - foo/bar
+            - foo/bar.zip
       - persist_to_workspace:
           root: ~/project
           paths:
@@ -24,6 +31,10 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/project
+      - run:
+          name: unzip
+          command: |
+            unzip foo/bar.zip
       - run: |
           ls -lh  ~/project/foo/bar
       - run: |
