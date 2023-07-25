@@ -14,7 +14,8 @@ jobs:
       - run:
           name: generate some files
           command: |
-            curl -s https://ramenipsum.herokuapp.com/paragraphs/1 > "results_${CIRCLE_NODE_INDEX}.txt"
+            # we need to ensure that the generated filepaths are unique
+            echo $RANDOM | md5sum | head -c 20 > "results_${CIRCLE_NODE_INDEX}.txt"
       - persist_to_workspace:
           root: ~/project
           paths:
