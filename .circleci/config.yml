@@ -14,8 +14,8 @@ jobs:
       - run:
           name: generate some files
           command: |
-            # we need to ensure that the generated filepaths are unique
-            echo $RANDOM | md5sum | head -c 20 > "results_${CIRCLE_NODE_INDEX}.txt"
+            # explicitly trying to cause collision
+            echo $RANDOM | md5sum | head -c 20 > "results.txt"
       - persist_to_workspace:
           root: ~/project
           paths:
