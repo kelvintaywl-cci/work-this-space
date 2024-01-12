@@ -19,7 +19,7 @@ jobs:
       - persist_to_workspace:
           root: ~/project
           paths:
-            - results_*
+            - results.txt
   collect:
     docker:
       - image: cimg/base:stable
