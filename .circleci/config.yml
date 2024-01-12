@@ -15,7 +15,7 @@ jobs:
           name: generate some files
           command: |
             # explicitly trying to cause collision
-            echo $RANDOM | md5sum | head -c 20 > "results.txt"
+            echo $RANDOM | md5sum | head -c 20 > results.txt
       - persist_to_workspace:
           root: ~/project
           paths:
@@ -25,6 +25,7 @@ jobs:
       - image: cimg/base:stable
     resource_class: small
     steps:
+      - run: echo $RANDOM | md5sum | head -c 20 > results.txt
       - attach_workspace:
           at: ~/project
       - run:
