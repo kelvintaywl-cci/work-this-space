@@ -2,20 +2,14 @@ version: 2.1
 
 jobs:
   test:
-    parallelism: 3
     docker:
       - image: cimg/base:stable
     resource_class: small
     steps:
       - run:
-          name: verify position
-          command: |
-            printenv CIRCLE_NODE_INDEX
-      - run:
           name: generate some files
           command: |
-            # explicitly trying to cause collision
-            echo $RANDOM | md5sum | head -c 20 > results.txt
+            echo "lorem ipsum" > results.txt
       - persist_to_workspace:
           root: ~/project
           paths:
@@ -25,25 +19,19 @@ jobs:
       - image: cimg/base:stable
     resource_class: small
     steps:
-      - run: echo $RANDOM | md5sum | head -c 20 > results.txt
+      # - run: echo "lorem ipsum" > results.txt
       - attach_workspace:
           at: ~/project
-      - run:
-          name: concat files
-          command: |
-            cat results_*.txt > combined.txt
-      - run:
-          name: examine combined file
-          command: |
-            cat combined.txt
-            
-            ls -laH .
 
 workflows:
   combine-files:
     jobs:
-      - test
+      - test:
+          name: test1
+      - test:
+          name: test2
       - collect:
           requires:
-            - test
+            - test1
+            - test2
             
