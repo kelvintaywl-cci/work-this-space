@@ -2,7 +2,7 @@ version: 2.1
 
 jobs:
   test:
-    parallelism: 3
+    parallelism: 2
     docker:
       - image: cimg/base:stable
     resource_class: small
